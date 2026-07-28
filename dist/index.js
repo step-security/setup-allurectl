@@ -35530,6 +35530,9 @@ function debug(message) {
 function error(message, properties = {}) {
   issueCommand("error", toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
+function warning(message, properties = {}) {
+  issueCommand("warning", toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
 function info(message) {
   process.stdout.write(message + os5.EOL);
 }
@@ -40820,16 +40823,13 @@ function getVersionBaseURL(version) {
     return `https://github.com/${"allure-framework" /* Owner */}/${"allurectl" /* Repo */}/releases/download/${version}`;
   }
 }
+function getBinaryFilename(os7, arch3) {
+  const ext = os7 === "windows" ? ".exe" : "";
+  return `allurectl_${os7}_${arch3}${ext}`;
+}
 function getDownloadURL(os7, arch3, version) {
-  const ext = (os8) => {
-    if (os8 === "windows") {
-      return ".exe";
-    } else {
-      return "";
-    }
-  };
   const versionBaseURL = getVersionBaseURL(version);
-  return `${versionBaseURL}/allurectl_${os7}_${arch3}${ext(os7)}`;
+  return `${versionBaseURL}/${getBinaryFilename(os7, arch3)}`;
 }
 
 // node_modules/@actions/github/lib/context.js
@@ -44545,6 +44545,7 @@ function getOctokit(token, options, ...additionalPlugins) {
 
 // src/install.ts
 var import_node_fs = require("node:fs");
+var import_node_crypto = require("node:crypto");
 function addInputVariableToEnv(input, env) {
   const value = getInput(input);
   if (value) {
@@ -44612,6 +44613,28 @@ async function getVersion(inputVersion) {
     return response.data.tag_name;
   }
 }
+async function verifyChecksum(binaryPath, filename, version) {
+  try {
+    const github_token = getInput("github-token", { required: true });
+    const client = getOctokit(github_token);
+    const response = await client.rest.repos.getReleaseByTag({
+      owner: "allure-framework" /* Owner */,
+      repo: "allurectl" /* Repo */,
+      tag: version
+    });
+    const asset = response.data.assets.find((a) => a.name === filename);
+    const digest = asset?.digest;
+    if (!digest?.startsWith("sha256:")) return;
+    const expectedHex = digest.slice("sha256:".length);
+    const actualHex = (0, import_node_crypto.createHash)("sha256").update(await import_node_fs.promises.readFile(binaryPath)).digest("hex");
+    if (actualHex !== expectedHex) {
+      warning(`Checksum mismatch for ${filename}: expected ${expectedHex}, got ${actualHex}`);
+    } else {
+      info(`Checksum verified: ${filename}`);
+    }
+  } catch {
+  }
+}
 async function install(inputVersion) {
   const version = await getVersion(inputVersion);
   info(`version: ${version}`);
@@ -44626,6 +44649,7 @@ async function install(inputVersion) {
   } else {
     const allurectlBinary = await downloadTool(toolURL);
     await import_node_fs.promises.chmod(allurectlBinary, 493);
+    await verifyChecksum(allurectlBinary, getBinaryFilename(os7, arch3), version);
     const toolName = getToolName("allurectl" /* CmdName */);
     toolPath = await cacheFile(
       allurectlBinary,

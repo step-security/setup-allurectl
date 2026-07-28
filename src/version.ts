@@ -34,19 +34,16 @@ export function getVersionBaseURL(version: string): string {
   }
 }
 
+export function getBinaryFilename(os: string, arch: string): string {
+  const ext = os === 'windows' ? '.exe' : ''
+  return `allurectl_${os}_${arch}${ext}`
+}
+
 export function getDownloadURL(
   os: string,
   arch: string,
   version: string
 ): string {
-  const ext = (os: string): string => {
-    if (os === 'windows') {
-      return '.exe'
-    } else {
-      return ''
-    }
-  }
-
   const versionBaseURL = getVersionBaseURL(version)
-  return `${versionBaseURL}/allurectl_${os}_${arch}${ext(os)}`
+  return `${versionBaseURL}/${getBinaryFilename(os, arch)}`
 }

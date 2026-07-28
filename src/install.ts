@@ -1,10 +1,11 @@
-import { addPath, debug, exportVariable, getInput, info } from '@actions/core'
+import { addPath, debug, exportVariable, getInput, info, warning } from '@actions/core'
 import { exec } from '@actions/exec'
 import { cacheFile, downloadTool, find } from '@actions/tool-cache'
-import { getOS, getArch, getDownloadURL } from './version'
+import { getOS, getArch, getDownloadURL, getBinaryFilename } from './version'
 import { context, getOctokit } from '@actions/github'
 import { Tool } from './const'
 import { promises as fsp } from 'node:fs'
+import { createHash } from 'node:crypto'
 
 function addInputVariableToEnv(input: string, env: string): void {
   const value = getInput(input)
@@ -82,6 +83,40 @@ export async function getVersion(inputVersion: string): Promise<string> {
   }
 }
 
+async function verifyChecksum(
+  binaryPath: string,
+  filename: string,
+  version: string
+): Promise<void> {
+  try {
+    const github_token = getInput('github-token', { required: true })
+    const client = getOctokit(github_token)
+    const response = await client.rest.repos.getReleaseByTag({
+      owner: Tool.Owner,
+      repo: Tool.Repo,
+      tag: version
+    })
+    const asset = response.data.assets.find(a => a.name === filename) as
+      | { name: string; digest?: string | null }
+      | undefined
+    const digest = asset?.digest
+    if (!digest?.startsWith('sha256:')) return
+
+    const expectedHex = digest.slice('sha256:'.length)
+    const actualHex = createHash('sha256')
+      .update(await fsp.readFile(binaryPath))
+      .digest('hex')
+
+    if (actualHex !== expectedHex) {
+      warning(`Checksum mismatch for ${filename}: expected ${expectedHex}, got ${actualHex}`)
+    } else {
+      info(`Checksum verified: ${filename}`)
+    }
+  } catch {
+    // verification is best-effort; never block the install
+  }
+}
+
 export async function install(inputVersion: string): Promise<void> {
   const version = await getVersion(inputVersion)
   info(`version: ${version}`)
@@ -100,6 +135,8 @@ export async function install(inputVersion: string): Promise<void> {
   } else {
     const allurectlBinary: string = await downloadTool(toolURL)
     await fsp.chmod(allurectlBinary, 0o755)
+
+    await verifyChecksum(allurectlBinary, getBinaryFilename(os, arch), version)
 
     const toolName = getToolName(Tool.CmdName)
 
