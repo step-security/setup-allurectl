@@ -1,6 +1,6 @@
 name: 'Setup Allure TestOps'
 description: 'Set up a specific version of the allurectl and add the command-line tools to the PATH'
-author: Artem Eroshhenko <eroshenkoam@me.com>
+author: 'step-security'
 inputs:
   allurectl-version:
     description: 'The release of allurectl to be used to upload the test results'

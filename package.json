@@ -1,6 +1,6 @@
 {
   "name": "setup-allurectl",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "private": true,
   "description": "setup allurectl action",
   "main": "dist/index.js",
@@ -13,30 +13,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/allure-framework/setup-allurectl.git"
+    "url": "git+https://github.com/step-security/setup-allurectl.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "step-security",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^3.0.1",
     "@actions/exec": "^3.0.0",
     "@actions/github": "^9.0.0",
-    "@actions/tool-cache": "^4.0.0"
+    "@actions/tool-cache": "^4.0.0",
+    "axios": "^1.18.0"
   },
   "overrides": {
     "js-yaml": "^4.2.0"
   },
   "devDependencies": {
-    "@octokit/core": "^7.0.6",
     "@types/node": "^24.0.0",
     "esbuild": "^0.28.1",
     "jest": "^29.7.0",
-    "lefthook": "^2.1.4",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
     "ts-jest": "^29.1.2",

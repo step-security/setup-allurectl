@@ -54,8 +54,8 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
