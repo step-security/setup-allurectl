@@ -11,7 +11,7 @@ This action intended to help you with the setup of `allurectl` in your workflow.
 ## Prerequisites
 
 1. You need to have Allure Testops instance with [trial](https://qameta.io/free-trial) or commercial licence up and running.
-2. You need to create API token which will be used for the authentication. To create tokens, [proceed to your Allure Testops profile.](https://docs.qameta.io/allure-testops/integrations/com/allure-token/)
+2. You need to create API token which will be used for the authentication. To create tokens, proceed to your Allure Testops profile.
 3. You need to have a project created in Allure Testops to which you are going to upload the test results.
 
 ## Usage
@@ -29,7 +29,7 @@ To upload the test results to Allure Testops please use following instructions i
 ```
 
 1. `allure.testops.url` is the URL of your Allure Testops instance without additional context paths, e.g. `https://allure.testops.url`
-2. `${{ secret.ALLURE_TOKEN }}` is the personal API token created in your profile of Allure Testops. You need to save [API Token](https://docs.qameta.io/allure-testops/integrations/com/allure-token/) under `/settings/secrets/actions` as a new secret with name `ALLURE_TOKEN` in your GitHub repository and use it as the reference to the created secret – `${{ secret.ALLURE_TOKEN }}`. Having this parameter saved as plain text in the workflow is a bad idea that will compromise API token and could lead to the data loss. Please avoid this.
+2. `${{ secret.ALLURE_TOKEN }}` is the personal API token created in your profile of Allure Testops. You need to save API Token under `/settings/secrets/actions` as a new secret with name `ALLURE_TOKEN` in your GitHub repository and use it as the reference to the created secret – `${{ secret.ALLURE_TOKEN }}`. Having this parameter saved as plain text in the workflow is a bad idea that will compromise API token and could lead to the data loss. Please avoid this.
 3. <PROJECT_ID> is the ID of a project to which you are sending the test results.
 
 ### Use allurectl to upload the test results to Allure Testops

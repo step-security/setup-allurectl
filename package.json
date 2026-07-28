@@ -29,9 +29,6 @@
     "@actions/tool-cache": "^4.0.0",
     "axios": "^1.18.0"
   },
-  "overrides": {
-    "js-yaml": "^4.2.0"
-  },
   "devDependencies": {
     "@types/node": "^24.0.0",
     "esbuild": "^0.28.1",
