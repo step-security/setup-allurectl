@@ -5,7 +5,13 @@
     "correctness": "error",
     "suspicious": "warn"
   },
-  "ignorePatterns": ["dist/", "lib/", "node_modules/", "jest.config.js"],
+  "ignorePatterns": [
+    "dist/",
+    "lib/",
+    "node_modules/",
+    "jest.config.js",
+    ".github/workflows"
+  ],
   "rules": {
     "no-unused-vars": "off",
     "eslint/no-unused-vars": "off",
