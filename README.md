@@ -29,7 +29,7 @@ To upload the test results to Allure Testops please use following instructions i
 ```
 
 1. `allure.testops.url` is the URL of your Allure Testops instance without additional context paths, e.g. `https://allure.testops.url`
-2. `${{ secret.ALLURE_TOKEN }}` is the personal API token created in your profile of Allure Testops. You need to save API Token under `/settings/secrets/actions` as a new secret with name `ALLURE_TOKEN` in your GitHub repository and use it as the reference to the created secret – `${{ secret.ALLURE_TOKEN }}`. Having this parameter saved as plain text in the workflow is a bad idea that will compromise API token and could lead to the data loss. Please avoid this.
+2. `${{ secrets.ALLURE_TOKEN }}` is the personal API token created in your profile of Allure Testops. You need to save API Token under `/settings/secrets/actions` as a new secret with name `ALLURE_TOKEN` in your GitHub repository and use it as the reference to the created secret – `${{ secrets.ALLURE_TOKEN }}`. Having this parameter saved as plain text in the workflow is a bad idea that will compromise API token and could lead to the data loss. Please avoid this.
 3. <PROJECT_ID> is the ID of a project to which you are sending the test results.
 
 ### Use allurectl to upload the test results to Allure Testops
@@ -63,7 +63,7 @@ jobs:
       - uses: step-security/setup-allurectl@v1
         with:
           allure-endpoint: https://demo.Testops.cloud
-          allure-token: ${{ secret.ALLURE_TOKEN }}
+          allure-token: ${{ secrets.ALLURE_TOKEN }}
           allure-project-id: 1
       - run: allurectl watch -- ./gradlew clean test
         env:
