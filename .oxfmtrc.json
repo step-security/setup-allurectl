@@ -8,5 +8,5 @@
   "bracketSpacing": true,
   "arrowParens": "avoid",
   "sortPackageJson": false,
-  "ignorePatterns": ["dist/", "lib/", "node_modules/", ".github/workflows"]
+  "ignorePatterns": ["dist/", "lib/", "node_modules/", ".github/workflows", ".pre-commit-config.yaml"]
 }
