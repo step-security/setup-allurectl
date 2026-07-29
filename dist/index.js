@@ -44628,7 +44628,9 @@ async function verifyChecksum(binaryPath, filename, version) {
     const expectedHex = digest.slice("sha256:".length);
     const actualHex = (0, import_node_crypto.createHash)("sha256").update(await import_node_fs.promises.readFile(binaryPath)).digest("hex");
     if (actualHex !== expectedHex) {
-      warning(`Checksum mismatch for ${filename}: expected ${expectedHex}, got ${actualHex}`);
+      warning(
+        `Checksum mismatch for ${filename}: expected ${expectedHex}, got ${actualHex}`
+      );
     } else {
       info(`Checksum verified: ${filename}`);
     }

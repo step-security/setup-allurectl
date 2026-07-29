@@ -1,4 +1,11 @@
-import { addPath, debug, exportVariable, getInput, info, warning } from '@actions/core'
+import {
+  addPath,
+  debug,
+  exportVariable,
+  getInput,
+  info,
+  warning
+} from '@actions/core'
 import { exec } from '@actions/exec'
 import { cacheFile, downloadTool, find } from '@actions/tool-cache'
 import { getOS, getArch, getDownloadURL, getBinaryFilename } from './version'
@@ -108,7 +115,9 @@ async function verifyChecksum(
       .digest('hex')
 
     if (actualHex !== expectedHex) {
-      warning(`Checksum mismatch for ${filename}: expected ${expectedHex}, got ${actualHex}`)
+      warning(
+        `Checksum mismatch for ${filename}: expected ${expectedHex}, got ${actualHex}`
+      )
     } else {
       info(`Checksum verified: ${filename}`)
     }
