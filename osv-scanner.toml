@@ -1,0 +1,3 @@
+[[IgnoredVulns]]
+id = "GHSA-mh99-v99m-4gvg"
+reason = "brace-expansion is a dev-only transitive dependency (jest -> minimatch) and is not bundled into the distributed action. The OOM DoS requires attacker control of glob inputs to Jest, which is not a realistic attack vector here."

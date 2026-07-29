@@ -10,7 +10,8 @@
     "lib/",
     "node_modules/",
     "jest.config.js",
-    ".github/workflows"
+    ".github/workflows",
+    ".pre-commit-config.yaml"
   ],
   "rules": {
     "no-unused-vars": "off",
